@@ -186,3 +186,10 @@ boletin-oficial-caba-ml/
 
 Juan Draghi – Bibliotecario, Consejo Profesional de Arquitectura y Urbanismo (CPAU).
 Este proyecto fue desarrollado como trabajo final de la Diplomatura en IA Aplicada a Entornos Digitales de Gestión (FCE–UBA, 2025)
+
+## Uso de herramientas de IA
+
+Parte del diseño metodológico, del código en Python y de la documentación de este proyecto fue asistida mediante el uso de modelos de lenguaje (ChatGPT, OpenAI), utilizados como apoyo durante la cursada de la Diplomatura en Inteligencia Artificial.
+
+Las decisiones de diseño, la definición del problema, la curaduría del dataset y la validación de resultados fueron realizadas por el autor.
+
