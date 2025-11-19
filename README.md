@@ -117,20 +117,20 @@ Este resultado refuerza la importancia de:
 
 El proyecto se concretó en un **pipeline utilizable en el trabajo diario**, basado en tres notebooks:
 
-1. **`05_bo_svm_inferencia.ipynb`**
+1. **`06_BO_SVM.ipynb`**
    - Carga un PDF reciente del Boletín Oficial.
    - Extrae candidatos según las reglas (`VERBO + KEYWORD/NORMAR`).
    - Aplica el modelo **TF-IDF + SVM**, usando un umbral ajustado por F2.
    - Genera un CSV con fragmentos clasificados como pertinentes / no pertinentes.
 
-2. **`06_bo_svm_feedback.ipynb`**
+2. **`07_BO_SVM_feedback.ipynb`**
    - Interfaz gráfica con **Gradio** para:
      - Leer `contexto`, `origen_pdf`, `score_svm`, `pred_pertinente`.
      - Editar el texto del fragmento.
      - Confirmar o corregir la etiqueta.
    - Las correcciones se acumulan en un archivo de feedback (`train_feedback_master.csv`).
 
-3. **`07_bo_svm_retrain.ipynb`**
+3. **`08_BO_SVM_retrain.ipynb`**
    - Reentrena periódicamente el modelo:
      - Usa `train` original + feedback acumulado.
      - Recalcula el umbral óptimo t_F2 usando el conjunto de validación.
@@ -167,6 +167,8 @@ boletin-oficial-caba-ml/
 │   └── (no se versiona: modelos entrenados)
 └── docs/
     └── informe_trabajo_final.pdf
+
+```
 
 ## 7. Autor
 
