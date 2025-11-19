@@ -116,6 +116,7 @@ Este resultado refuerza la importancia de:
 - Evaluar siempre contra un baseline clásico bien calibrado.
 
 **Pipeline:** **`05_FineTuning_v1_ES_Legal`**
+
 ---
 
 ## 5. Pipeline operativo
