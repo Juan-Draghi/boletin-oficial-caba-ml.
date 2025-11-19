@@ -8,7 +8,7 @@ El proyecto aborda un problema real de trabajo: **detectar automáticamente norm
 
 ## 1. Objetivo del proyecto
 
-Desarrollar un **clasificador supervisado** que, dado un fragmento de texto extraído del BOCBA, indique si la norma es **pertinente** o **no pertinente** para el ámbito profesional de la arquitectura y el urbanismo.
+Desarrollar un **clasificador supervisado** que, dado un fragmento de texto extraído del BOGCBA, indique si la norma es **pertinente** o **no pertinente** para el ámbito profesional de la arquitectura y el urbanismo.
 
 En particular:
 
@@ -92,6 +92,7 @@ El mejor rendimiento se obtuvo con **TF-IDF + SVM**, que mostró:
 - AUC-ROC y AUC-PR elevadas, dadas las proporciones de clase del problema.
 
 **Pipeline:** **`04_Baseline_BO_CABA_TFIDF_4modelos`**
+
 ---
 
 ## 4. Fine-tuning de modelo de lenguaje
