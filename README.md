@@ -1,8 +1,8 @@
-# Aplicación de Machine Learning para la identificación de normativa relevante en el Boletín Oficial de la Ciudad de Buenos Aires
+# Aplicación de Machine Learning para la identificación de normativa relevante en el Boletín Oficial del Gobierno de la Ciudad de Buenos Aires
 
 Este repositorio contiene el código y parte del contenido generado para el trabajo final de la **Diplomatura en Inteligencia Artificial Aplicada a Entornos Digitales de Gestión (FCE–UBA, 2025)**.
 
-El proyecto aborda un problema real de trabajo: **detectar automáticamente normativa relevante para el ejercicio profesional de la arquitectura y el urbanismo en el Boletín Oficial de la Ciudad de Buenos Aires (BOCBA)**, reduciendo la carga de revisión manual diaria.
+El proyecto aborda un problema real de trabajo: **detectar automáticamente normativa relevante para el ejercicio profesional de la arquitectura y el urbanismo en el Boletín Oficial del Gobierno de la Ciudad de Buenos Aires (BOGCBA)**, reduciendo la carga de revisión manual diaria.
 
 ---
 
@@ -22,15 +22,13 @@ En particular:
 
 ### Fuente
 
-- Boletín Oficial de la Ciudad de Buenos Aires (PDFs descargados desde el sitio oficial).
+- Boletín Oficial del Gobierno la Ciudad de Buenos Aires (PDFs descargados desde el sitio oficial).
 - Período analizado:
   - **Train**: 2018 – 1er semestre de 2024
   - **Validación (val)**: 2º semestre de 2024
   - **Test**: 2025 (ampliado en meses para aumentar la cantidad de positivos)
 
-Se incluyen los datasets completos.
-
-Cada archivo contiene, entre otras, las columnas:
+Se incluyen los datasets completos. Cada archivo contiene, entre otras, las columnas:
 
 - `contexto`: fragmento de texto extraído del BO.
 - `label`: 1 si el fragmento se considera pertinente, 0 en caso contrario.
@@ -52,6 +50,8 @@ En la versión de producción, se consideran candidatos los fragmentos que cumpl
 
 El texto se segmenta en oraciones y se arma una **ventana de contexto** alrededor de la oración que dispara la coincidencia.
 
+**Pipeline:** **`01_Dataset_Builder_v1_`** - **`02_Triage_v1_etiquetas`**
+
 ### Etiquetado y curación
 
 - Se desarrolló una interfaz con **Gradio** para:
@@ -63,6 +63,8 @@ El texto se segmenta en oraciones y se arma una **ventana de contexto** alrededo
   - Que las leyes “ómnibus” se descompusieran en registros separados por artículo.
 
 El resultado es un dataset con proporciones de positivos realistas (alrededor del 30% en train y valores más bajos en val/test, que reflejan la escasez real de normativa relevante).
+
+**Pipeline:** **`03_Editor_Gradio_BO_CSV`**
 
 ---
 
@@ -89,6 +91,7 @@ El mejor rendimiento se obtuvo con **TF-IDF + SVM**, que mostró:
 - Tasas de falsos negativos muy bajas (pocos casos relevantes sin detectar).
 - AUC-ROC y AUC-PR elevadas, dadas las proporciones de clase del problema.
 
+**Pipeline:** **`04_Baseline_BO_CABA_TFIDF_4modelos`**
 ---
 
 ## 4. Fine-tuning de modelo de lenguaje
@@ -111,6 +114,7 @@ Este resultado refuerza la importancia de:
 - Ajustar expectativas frente a modelos grandes.
 - Evaluar siempre contra un baseline clásico bien calibrado.
 
+**Pipeline:** **`05_FineTuning_v1_ES_Legal`**
 ---
 
 ## 5. Pipeline operativo
@@ -148,25 +152,31 @@ De esta manera, el modelo puede **seguir aprendiendo con el uso cotidiano**, inc
 boletin-oficial-caba-ml/
 ├── README.md
 ├── requirements.txt
-├── .gitignore
 ├── notebooks/
-│   ├── 01_dataset_builder.ipynb
-│   ├── 02_triage_etiquetado.ipynb
-│   ├── 03_baseline_tfidf_4modelos.ipynb
-│   ├── 04_finetuning_robertalex.ipynb
-│   ├── 05_bo_svm_inferencia.ipynb
-│   ├── 06_bo_svm_feedback.ipynb
-│   └── 07_bo_svm_retrain.ipynb
+│   ├── 01_Dataset_Builder_v1_.ipynb
+│   ├── 02_Triage_v1_etiquetas.ipynb
+│   ├── 03_Editor_Gradio_BO_CSV.ipynb
+│   ├── 04_Baseline_BO_CABA_TFIDF_4modelos.ipynb
+│   ├── 05_FineTuning_v1_ES_Legal.ipynb
+│   ├── 06_BO_SVM.ipynb
+|   ├── 07_BO_SVM_feedback.ipynb
+│   └── 08_BO_SVM_retrain.ipynb
 ├── data/
-│   ├── README_data.md
-│   └── samples/
-│       ├── sample_train.csv
-│       ├── sample_val.csv
-│       └── sample_test.csv
+│   └── labels/
+│       ├── dataset_train_final.csv
+│       ├── dataset_val_final.csv
+│       └── dataset_test_final.csv
 ├── models/
-│   └── (no se versiona: modelos entrenados)
+│   └── baseline
+│   └── demo_svm
+│   └── finetuning
+│   └── svm_tfidf_v1
+├── metrics/
+│   └── baseline
+│   └── finetuning
+│   └── metricas_comparativa.xls
 └── docs/
-    └── informe_trabajo_final.pdf
+    └── Aplicación de Machine Learning para la detección de normativa relevante en el Boletín Oficial de la Ciudad de Buenos Aires.pdf
 
 ```
 
