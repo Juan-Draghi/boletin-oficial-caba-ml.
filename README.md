@@ -178,7 +178,7 @@ boletin-oficial-caba-ml/
 │   └── finetuning
 │   └── metricas_comparativa.xls
 └── docs/
-    └── Aplicación de Machine Learning para la detección de normativa relevante en el Boletín Oficial de la Ciudad de Buenos Aires.pdf
+    └── Draghi_Informe_TP_Final.pdf
 
 ```
 
