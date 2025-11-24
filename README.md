@@ -182,7 +182,31 @@ boletin-oficial-caba-ml/
 
 ```
 
-## 7. Autor
+## 7. Evolución del proyecto
+
+Este trabajo es la cuarta iteración de una serie de prototipos para automatizar el relevamiento normativo en el Boletín Oficial de CABA:
+
+1. **v1 – Búsqueda por palabras clave**  
+   Script en Python que recorre PDFs y exporta coincidencias a Excel.
+
+2. **v2 – Palabras clave + verbos de acción normativa**  
+   Reducción de falsos positivos incorporando verbos como "aprueba", "deroga", etc.
+
+3. **v3 – LLM vía API**  
+   Uso de un modelo de lenguaje para evaluar la relevancia de los fragmentos candidatos.
+
+4. **v4 – Clasificación supervisada (repo actual)**  
+   Construcción de un dataset etiquetado, entrenamiento de modelos clásicos de ML, 
+   exploración de fine-tuning y despliegue de un pipeline SVM + TF-IDF.
+
+Repositorios anteriores (históricos):
+
+- v1: [https://github.com/tu-usuario/boletin-oficial-caba-v1-keywords](https://github.com/Juan-Draghi/boletin-oficial-caba-v1-keywords)
+- v2: [https://github.com/tu-usuario/boletin-oficial-caba-v2-keywords-verbos](https://github.com/Juan-Draghi/boletin-oficial-caba-v2-keywords-verbos)
+- v3: [https://github.com/tu-usuario/boletin-oficial-caba-v3-llm-api](https://github.com/Juan-Draghi/boletin-oficial-caba-v3-llm-api)
+
+
+## 8. Autor
 
 Juan Draghi – Bibliotecario, Consejo Profesional de Arquitectura y Urbanismo (CPAU).
 Este proyecto fue desarrollado como trabajo final de la Diplomatura en IA Aplicada a Entornos Digitales de Gestión (FCE–UBA, 2025)
