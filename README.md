@@ -66,14 +66,10 @@ boletin-oficial-caba-ml/
 ├── README.md
 ├── requirements.txt
 ├── notebooks/
-│   ├── 01_Dataset_Builder_v1_.ipynb               # Extracción de datos
-│   ├── 02_Triage_v1_etiquetas.ipynb               # Limpieza de datos
-│   ├── 03_Editor_Gradio_BO_CSV.ipynb              # Etiquetado
-│   ├── 04_Baseline_BO_CABA_TFIDF_4modelos.ipynb   # Comparativa: Regresión Logística, Naive Bayes, Random Forest, SVM
-│   ├── 05_FineTuning_v1_ES_Legal.ipynb            # Experimento con RoBERTalex (Hugging Face)
-│   ├── 06_BO_SVM.ipynb                            # Pipeline diario: Inferencia
-|   ├── 07_BO_SVM_feedback.ipynb                   # Pipeline diario: Feedback
-│   └── 08_BO_SVM_retrain.ipynb                    # Pipeline diario: Reentrenamiento
+│   ├── 01_Dataset_Builder/          # Extracción, limpieza y etiquetado (Gradio)
+│   ├── 02_Baseline_ML/              # Comparativa: Regresión Logística, Naive Bayes, Random Forest, SVM
+│   ├── 03_FineTuning_LLM/           # Experimento con RoBERTalex (Hugging Face)
+│   ├── 04_Production/               # Pipeline diario: Inferencia -> Feedback -> Reentrenamiento
 ├── data/
 │   └── labels/
 │       ├── dataset_train_final.csv
