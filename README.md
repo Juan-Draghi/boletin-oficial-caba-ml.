@@ -1,188 +1,79 @@
-# Aplicación de Machine Learning para la identificación de normativa relevante en el Boletín Oficial del Gobierno de la Ciudad de Buenos Aires
+# Detector de Normativa Legal para Arquitectos (CPAU)
 
-Este repositorio contiene el código y parte del contenido generado para el trabajo final de la **Diplomatura en Inteligencia Artificial Aplicada a Entornos Digitales de Gestión (FCE–UBA, 2025)**.
+> **Automatización del relevamiento normativo mediante Machine Learning: Reduciendo la carga manual y minimizando el riesgo legal.**
 
-El proyecto aborda un problema real de trabajo: **detectar automáticamente normativa relevante para el ejercicio profesional de la arquitectura y el urbanismo en el Boletín Oficial del Gobierno de la Ciudad de Buenos Aires (BOGCBA)**, reduciendo la carga de revisión manual diaria.
+Este proyecto implementa un pipeline de NLP supervisado para detectar automáticamente normativa relevante para el ejercicio de la arquitectura y el urbanismo en el **Boletín Oficial de la Ciudad de Buenos Aires (BOGCBA)**.
 
----
-
-## 1. Objetivo del proyecto
-
-Desarrollar un **clasificador supervisado** que, dado un fragmento de texto extraído del BOGCBA, indique si la norma es **pertinente** o **no pertinente** para el ámbito profesional de la arquitectura y el urbanismo.
-
-En particular:
-
-- Disminuir el tiempo de lectura y selección manual de normas.
-- Reducir el riesgo de pasar por alto normativa relevante.
-- Contar con un pipeline actualizable, que pueda seguir aprendiendo a partir de nuevo feedback.
+Desarrollado como trabajo final para la Diplomatura en IA Aplicada (FCE–UBA, 2025) y actualmente en producción para uso interno.
 
 ---
 
-## 2. Datos y construcción del dataset
+## 🎯 El Problema de Negocio
+Los bibliotecarios y referencistas del Consejo Profesional (CPAU) deben revisar diariamente cientos de páginas de documentos legales para encontrar normas críticas (códigos de edificación, habilitaciones, etc.).
+* **El Costo:** Horas de lectura manual propensas a la fatiga.
+* **El Riesgo:** Pasar por alto una modificación normativa ("Falso Negativo") puede tener consecuencias legales graves para los matriculados.
 
-### Fuente
-
-- Boletín Oficial del Gobierno la Ciudad de Buenos Aires (PDFs descargados desde el sitio oficial).
-- Período analizado:
-  - **Train**: 2018 – 1er semestre de 2024
-  - **Validación (val)**: 2º semestre de 2024
-  - **Test**: 2025 (ampliado en meses para aumentar la cantidad de positivos)
-
-Se incluyen los datasets completos. Cada archivo contiene, entre otras, las columnas:
-
-- `contexto`: fragmento de texto extraído del BO.
-- `label`: 1 si el fragmento se considera pertinente, 0 en caso contrario.
-- `origen_pdf`: nombre del archivo del boletín.
-- `pagina`: número de página en el boletín.
-
-### Extracción de candidatos
-
-La detección de fragmentos candidatos se realiza combinando:
-
-- **VERBOS_ACCION**: verbos típicos de acción normativa (aprueba, deroga, modifica, etc.).
-- **KEYWORDS**: términos clave vinculados al ejercicio profesional (Código Urbanístico, Registro de Profesionales, etc.).
-- **PATRONES_NORMAR**: expresiones regulares que capturan referencias a normas específicas (leyes, decretos, resoluciones, etc.).
-
-En la versión de producción, se consideran candidatos los fragmentos que cumplen:
-
-- `VERBO AND KEYWORD AND NORMAR`, o
-- `VERBO AND (KEYWORD OR NORMAR)`
-
-El texto se segmenta en oraciones y se arma una **ventana de contexto** alrededor de la oración que dispara la coincidencia.
-
-**Pipeline:** **`01_Dataset_Builder_v1_`** - **`02_Triage_v1_etiquetas`**
-
-### Etiquetado y curación
-
-- Se desarrolló una interfaz con **Gradio** para:
-  - Visualizar el fragmento de contexto.
-  - Editarlo para dejar solo la parte relevante (sumario y/o articulado).
-  - Asignar etiqueta `pertinente` / `no pertinente`.
-- Posteriormente se hizo una **revisión manual** para asegurar:
-  - Que todas las normas relevantes del período estuvieran presentes.
-  - Que las leyes “ómnibus” se descompusieran en registros separados por artículo.
-
-El resultado es un dataset con proporciones de positivos realistas (alrededor del 30% en train y valores más bajos en val/test, que reflejan la escasez real de normativa relevante).
-
-**Pipeline:** **`03_Editor_Gradio_BO_CSV`**
+## 💡 La Solución
+Un clasificador binario que procesa los PDFs del Boletín Oficial, extrae fragmentos candidatos mediante heurísticas y utiliza un modelo de Machine Learning para determinar su pertinencia con un **Recall (Sensibilidad) superior al 85%**.
 
 ---
 
-## 3. Modelado: baseline clásico
+## 🚀 Hallazgos Técnicos Clave: SVM vs. LLMs
+Uno de los puntos más interesantes de este proyecto fue la comparativa de costo-efectividad entre métodos clásicos y Deep Learning.
 
-La primera etapa de modelado se realizó con **Machine Learning clásico**, utilizando:
+| Enfoque | Modelo | Resultado | Conclusión |
+| :--- | :--- | :--- | :--- |
+| **ML Clásico** | **TF-IDF + SVM** | 🏆 **Ganador** | Mejor manejo de pocos datos, más rápido, F1-Score superior (0.75). |
+| **LLM Fine-Tuning** | **RoBERTalex** | 📉 Inferior | Sufrió de *overfitting* por el tamaño del dataset y desajuste de dominio (España vs. Argentina). |
 
-- Representación de texto: `TF-IDF` (unigramas y bigramas).
-- Modelos probados:
-  - Regresión Logística
-  - Naive Bayes
-  - Random Forest
-  - **Máquinas de Vectores de Soporte (SVM)**
-
-Dado que el objetivo principal es **no perder normas relevantes**, se priorizó:
-
-- **Recall (sensibilidad)** sobre precisión.
-- Optimización con la métrica **F2** (que pondera más el recall).
-- Ajuste de umbral de decisión a partir de curvas de precisión–recall.
-
-El mejor rendimiento se obtuvo con **TF-IDF + SVM**, que mostró:
-
-- Alto **recall** en el conjunto de test.
-- Tasas de falsos negativos muy bajas (pocos casos relevantes sin detectar).
-- AUC-ROC y AUC-PR elevadas, dadas las proporciones de clase del problema.
-
-**Pipeline:** **`04_Baseline_BO_CABA_TFIDF_4modelos`**
+**Decisión de Arquitectura:** Se implementó **SVM** en producción. Esto demuestra que, para tareas de clasificación de texto con dominios muy específicos y datasets limitados (<3000 ejemplos), un modelo clásico bien calibrado suele superar a los Transformers, siendo infinitamente más barato de mantener.
 
 ---
 
-## 4. Fine-tuning de modelo de lenguaje
+## 📊 Metodología y Métricas
 
-Se exploró el **fine-tuning** de un modelo de lenguaje especializado en dominio legal:
+### 1. Enfoque "Recall-First"
+En el ámbito legal, un Falso Positivo (leer una norma irrelevante) es una molestia menor, pero un **Falso Negativo (perderse una ley) es inaceptable**.
+* Se optimizó el modelo priorizando la métrica **F2-Score** y el **Recall**.
+* El umbral de decisión no es el estándar (0.5), sino uno calibrado específicamente para capturar la mayor cantidad de positivos posibles.
 
-- Modelo utilizado: [`BSC-LT/RoBERTalex`](https://huggingface.co/BSC-LT/RoBERTalex)
-- Tarea: clasificación binaria de pertinencia sobre los mismos fragmentos de texto.
-
-En este caso, el modelo de lenguaje:
-
-- No superó el rendimiento de **TF-IDF + SVM** en el conjunto de test.
-- Posibles razones:
-  - Tamaño relativamente reducido del dataset supervisado.
-  - Desajuste entre el dominio legal-administrativo en el que fue pre-entrenado el modelo (España) y la normativa específica de CABA.
-  - El baseline clásico ya captura bien patrones muy claros en sumarios y articulados.
-
-Este resultado refuerza la importancia de:
-
-- Ajustar expectativas frente a modelos grandes.
-- Evaluar siempre contra un baseline clásico bien calibrado.
-
-**Pipeline:** **`05_FineTuning_v1_ES_Legal`**
+### 2. Construcción del Dataset (Human-in-the-loop)
+* **Fuente:** PDFs del BOGCBA (2018–2025).
+* **Curación:** Etiquetado manual asistido por una interfaz en **Gradio**.
+* **Split Temporal:** Train (2018-2024) / Test (2025). Se valida con "el futuro" para simular el escenario real de producción.
 
 ---
 
-## 5. Pipeline operativo
+## 🛠️ Stack Tecnológico y Pipeline
 
-El proyecto se concretó en un **pipeline utilizable en el trabajo diario**, basado en tres notebooks:
+El sistema funciona con un flujo de 3 etapas modularizadas:
 
-1. **`06_BO_SVM.ipynb`**
-   - Carga un PDF reciente del Boletín Oficial.
-   - Extrae candidatos según las reglas (`VERBO + KEYWORD/NORMAR`).
-   - Aplica el modelo **TF-IDF + SVM**, usando un umbral ajustado por F2.
-   - Genera un CSV con fragmentos clasificados como pertinentes / no pertinentes.
-
-2. **`07_BO_SVM_feedback.ipynb`**
-   - Interfaz gráfica con **Gradio** para:
-     - Leer `contexto`, `origen_pdf`, `score_svm`, `pred_pertinente`.
-     - Editar el texto del fragmento.
-     - Confirmar o corregir la etiqueta.
-   - Las correcciones se acumulan en un archivo de feedback (`train_feedback_master.csv`).
-
-3. **`08_BO_SVM_retrain.ipynb`**
-   - Reentrena periódicamente el modelo:
-     - Usa `train` original + feedback acumulado.
-     - Recalcula el umbral óptimo t_F2 usando el conjunto de validación.
-   - Evalúa en test y guarda:
-     - El nuevo pipeline TF-IDF + SVM.
-     - El nuevo umbral de decisión.
-
-De esta manera, el modelo puede **seguir aprendiendo con el uso cotidiano**, incorporando nueva normativa y mejorando progresivamente.
+1.  **Ingesta y Filtrado (Reglas):**
+    * Extracción de texto de PDF.
+    * Triangulación de candidatos usando Regex: `VERBOS_ACCION` + (`KEYWORDS` o `PATRONES_NORMATIVOS`).
+2.  **Clasificación (ML):**
+    * Vectorización TF-IDF (1-2 n-grams).
+    * Inferencia con Support Vector Machine (SVM).
+3.  **Feedback Loop (Mejora Continua):**
+    * Interfaz visual (Gradio) para que el experto humano valide las predicciones diarias.
+    * Los errores del modelo se reinyectan en el dataset de entrenamiento (`08_BO_SVM_retrain.ipynb`).
 
 ---
 
-## 6. Estructura del repositorio
+## 📂 Estructura del Repositorio
 
 ```text
-boletin-oficial-caba-ml/
-├── README.md
-├── requirements.txt
 ├── notebooks/
-│   ├── 01_Dataset_Builder_v1_.ipynb
-│   ├── 02_Triage_v1_etiquetas.ipynb
-│   ├── 03_Editor_Gradio_BO_CSV.ipynb
-│   ├── 04_Baseline_BO_CABA_TFIDF_4modelos.ipynb
-│   ├── 05_FineTuning_v1_ES_Legal.ipynb
-│   ├── 06_BO_SVM.ipynb
-|   ├── 07_BO_SVM_feedback.ipynb
-│   └── 08_BO_SVM_retrain.ipynb
-├── data/
-│   └── labels/
-│       ├── dataset_train_final.csv
-│       ├── dataset_val_final.csv
-│       └── dataset_test_final.csv
-├── models/
-│   └── baseline
-│   └── demo_svm
-│   └── finetuning
-│   └── svm_tfidf_v1
-├── metrics/
-│   └── baseline
-│   └── finetuning
-│   └── metricas_comparativa.xls
-└── docs/
-    └── Draghi_Informe_TP_Final.pdf
-
+│   ├── 01-03_Dataset_Builder/   # Extracción, limpieza y etiquetado (Gradio)
+│   ├── 04_Baseline_ML/          # Comparativa: Regresión Logística, Naive Bayes, RF, SVM
+│   ├── 05_FineTuning_LLM/       # Experimentos con RoBERTalex (Hugging Face)
+│   └── 06-08_Production/        # Pipeline diario: Inferencia -> Feedback -> Reentrenamiento
+├── data/                        # Datasets (train/val/test) anonimizados
+├── models/                      # Serializados (.pkl) del modelo ganador
+└── docs/                        # Informe técnico detallado
 ```
 
-## 7. Evolución del proyecto
+## 🔄 Evolución del proyecto
 
 Este trabajo es la cuarta iteración de una serie de prototipos para automatizar el relevamiento normativo en el Boletín Oficial de CABA:
 
@@ -199,14 +90,8 @@ Este trabajo es la cuarta iteración de una serie de prototipos para automatizar
    Construcción de un dataset etiquetado, entrenamiento de modelos clásicos de ML, 
    exploración de fine-tuning y despliegue de un pipeline SVM + TF-IDF.
 
-Repositorios anteriores (históricos):
 
-- v1: [https://github.com/tu-usuario/boletin-oficial-caba-v1-keywords](https://github.com/Juan-Draghi/boletin-oficial-caba-v1-keywords)
-- v2: [https://github.com/tu-usuario/boletin-oficial-caba-v2-keywords-verbos](https://github.com/Juan-Draghi/boletin-oficial-caba-v2-keywords-verbos)
-- v3: [https://github.com/tu-usuario/boletin-oficial-caba-v3-llm-api](https://github.com/Juan-Draghi/boletin-oficial-caba-v3-llm-api)
-
-
-## 8. Autor
+## ✒️ Autor
 
 Juan Draghi – Bibliotecario, Consejo Profesional de Arquitectura y Urbanismo (CPAU).
 Este proyecto fue desarrollado como trabajo final de la Diplomatura en IA Aplicada a Entornos Digitales de Gestión (FCE–UBA, 2025)
