@@ -55,7 +55,7 @@ El sistema funciona con un flujo de 3 etapas modularizadas:
     * Inferencia con Support Vector Machine (SVM).
 3.  **Feedback Loop (Mejora Continua):**
     * Interfaz visual (Gradio) para que el experto humano valide las predicciones diarias.
-    * Los nuevos registros se reinyectan en el dataset de entrenamiento (`08_BO_SVM_retrain.ipynb`).
+    * Los nuevos registros se reinyectan en el dataset de entrenamiento.
 
 ---
 
