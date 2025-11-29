@@ -32,7 +32,7 @@ Uno de los puntos más interesantes de este proyecto fue la comparativa de costo
 ## 📊 Metodología y Métricas
 
 ### 1. Enfoque "Recall-First"
-En el ámbito legal, un Falso Positivo (leer una norma irrelevante) es una molestia menor, pero un **Falso Negativo (perderse una ley) es inaceptable**.
+En el ámbito legal, un Falso Positivo (clasificar erróneamene una norma irrelevante) es una molestia menor, pero un **Falso Negativo (pasar pro alto una norma relevante) es inaceptable**.
 * Se optimizó el modelo priorizando el **Recall**.
 * El umbral de decisión no es el estándar (0.5), sino uno calibrado específicamente para capturar la mayor cantidad de positivos posibles.
 
