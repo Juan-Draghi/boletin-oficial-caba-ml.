@@ -2,7 +2,7 @@
 
 > Desarrollado como trabajo final de la **Diplomatura en Inteligencia Artificial Aplicada a Entornos Digitales de Gestión (FCE–UBA, 2025)**.
 
-Este proyecto implementa un pipeline de NLP supervisado para detectar automáticamente normativa relevante para el ejercicio profesional de la arquitectura y el urbanismo en el **Boletín Oficial de la Ciudad de Buenos Aires**.
+Este proyecto implementa un pipeline de aprendizaje supervisado para detectar automáticamente normativa relevante para el ejercicio profesional de la arquitectura y el urbanismo en el **Boletín Oficial de la Ciudad de Buenos Aires**.
 
 ---
 
