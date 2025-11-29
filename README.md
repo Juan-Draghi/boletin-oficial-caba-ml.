@@ -80,7 +80,7 @@ boletin-oficial-caba-ml/
 ├── metrics/
 │   └── baseline
 │   └── finetuning
-│   └── metricas_comparativa.xls
+│   └── metricas_comparativa.csv
 └── docs/
     └── Draghi_Informe_TP_Final.pdf  # Informe técnico detallado
 ```
