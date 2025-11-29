@@ -106,7 +106,6 @@ Este trabajo es la cuarta iteración de una serie de prototipos para automatizar
 ## ✒️ Autor
 
 Juan Draghi – Bibliotecario, Consejo Profesional de Arquitectura y Urbanismo (CPAU).
-Este proyecto fue desarrollado como trabajo final de la Diplomatura en IA Aplicada a Entornos Digitales de Gestión (FCE–UBA, 2025)
 
 ## Uso de herramientas de IA
 
