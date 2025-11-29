@@ -75,10 +75,8 @@ boletin-oficial-caba-ml/
 │   ├── dataset_val.csv
 │   └── dataset_test.csv
 ├── models/
-│   └── baseline
-│   └── demo_svm
-│   └── finetuning
-│   └── svm_tfidf_v1
+│   └── demo_svm/
+│   └── finetuning/
 ├── metrics/
 │   └── baseline
 │   └── finetuning
