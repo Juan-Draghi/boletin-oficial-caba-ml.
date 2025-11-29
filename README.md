@@ -17,13 +17,13 @@ Un clasificador binario que procesa los PDFs del Boletín Oficial, extrae fragme
 
 ---
 
-## 🚀 Hallazgos Técnicos Clave: SVM vs. LLMs
+## 🚀 Hallazgos Técnicos Clave: SVM vs. Transformes
 Uno de los puntos más interesantes de este proyecto fue la comparativa de costo-efectividad entre métodos clásicos y Deep Learning.
 
 | Enfoque | Modelo | Resultado | Conclusión |
 | :--- | :--- | :--- | :--- |
 | **ML Clásico** | **TF-IDF + SVM** | 🏆 **Ganador** | Mejor manejo de pocos datos, más rápido, F1-Score superior (0.75). |
-| **LLM Fine-Tuning** | **RoBERTalex** | 📉 Inferior | No logró especializarse por el tamaño del dataset y desajuste de dominio (España vs. Argentina). |
+| **Transformer** | **RoBERTalex** | 📉 Inferior | No logró especializarse por el tamaño del dataset y desajuste de dominio (España vs. Argentina). |
 
 **Decisión de Arquitectura:** Se implementó **SVM** en producción. Esto demuestra que, para tareas de clasificación de texto con dominios muy específicos y datasets limitados (<3000 ejemplos), un modelo clásico bien calibrado suele superar a los Transformers, siendo infinitamente más barato de mantener.
 
