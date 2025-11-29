@@ -17,7 +17,7 @@ Un clasificador binario que procesa los PDFs del Boletín Oficial, extrae fragme
 
 ---
 
-## 🚀 Hallazgos Técnicos Clave: SVM vs. Transformes
+## 🚀 Hallazgos Técnicos Clave: SVM vs. Transformers
 Uno de los puntos más interesantes de este proyecto fue la comparativa de costo-efectividad entre métodos clásicos y Deep Learning.
 
 | Enfoque | Modelo | Resultado | Conclusión |
