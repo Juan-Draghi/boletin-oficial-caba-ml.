@@ -71,10 +71,9 @@ boletin-oficial-caba-ml/
 │   ├── 03_FineTuning_LLM/           # Experimento con RoBERTalex (Hugging Face)
 │   ├── 04_Production/               # Pipeline diario: Inferencia -> Feedback -> Reentrenamiento
 ├── data/
-│   └── labels/
-│       ├── dataset_train_final.csv
-│       ├── dataset_val_final.csv
-│       └── dataset_test_final.csv
+│   ├── dataset_train.csv
+│   ├── dataset_val.csv
+│   └── dataset_test.csv
 ├── models/
 │   └── baseline
 │   └── demo_svm
