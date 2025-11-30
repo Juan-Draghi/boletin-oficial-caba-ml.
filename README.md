@@ -6,44 +6,44 @@ Este proyecto implementa un pipeline de aprendizaje supervisado para detectar au
 
 ---
 
-## 🎯 Definición del Problema
+## 1. Definición del Problema
 Los bibliotecarios del Consejo Profesional de Arquitectura y Urbanismo (CPAU) deben revisar diariamente el Boletín Oficial de la Ciudad de Buenos Aires para detectar normas referidas a construcción, planificación urbana, habilitaciones comerciales, impacto ambiental, seguridad e higiene, planes de evacuación, uso del espacio público, etc.
 
 Esta revisión se realiza de forma manual y, dado que cada ejemplar tiene cientos de páginas, la posibilidad de pasar por alto una norma relevante es elevada.
 
 
-## 💡 La Solución
+## 2. La Solución
 Un clasificador binario que procesa los PDFs del Boletín Oficial, extrae fragmentos candidatos mediante heurísticas y utiliza un modelo de Machine Learning para determinar su pertinencia con un **Recall (Sensibilidad) superior al 85%**.
 
 ---
 
-## 🚀 Hallazgos Técnicos Clave: SVM vs. Transformers
+## 3. Hallazgos Técnicos Clave: SVM vs. Transformers
 Uno de los puntos más interesantes de este proyecto fue la comparativa de costo-efectividad entre métodos clásicos y Deep Learning.
 
 | Enfoque | Modelo | Resultado | Conclusión |
 | :--- | :--- | :--- | :--- |
 | **ML Clásico** | **TF-IDF + SVM** | 🏆 **Ganador** | Mejor manejo de pocos datos, más rápido, F1-Score superior (0.75). |
-| **Transformer** | **RoBERTalex** | 📉 Inferior | No logró especializarse por el tamaño del dataset y desajuste de dominio (España vs. Argentina). |
+| **Transformer** | **RoBERTalex** | 📉 Inferior | Sufrió problemas de generalización por escasez de datos y desajuste de dominio (España vs. Argentina). |
 
 **Decisión de Arquitectura:** Se implementó **SVM** en producción. Esto demuestra que, para tareas de clasificación de texto con dominios muy específicos y datasets limitados (<3000 ejemplos), un modelo clásico bien calibrado suele superar a los Transformers, siendo infinitamente más barato de mantener.
 
 ---
 
-## 📊 Metodología y Métricas
+## 3. Metodología y Métricas
 
-### 1. Enfoque "Recall-First"
+### 3.1 Enfoque "Recall-First"
 En el ámbito legal, un Falso Positivo (clasificar erróneamene una norma irrelevante) es una molestia menor, pero un **Falso Negativo (pasar pro alto una norma relevante) es inaceptable**.
-* Se optimizó el modelo priorizando el **Recall**.
+* Se optimizó el modelo priorizando el **Recall** (t_F2).
 * El umbral de decisión no es el estándar (0.5), sino uno calibrado específicamente para capturar la mayor cantidad de positivos posibles.
 
-### 2. Construcción del Dataset
+### 3.2 Construcción del Dataset
 * **Fuente:** PDFs del BOGCBA (2018–2025).
 * **Curación:** Etiquetado manual asistido por una interfaz en **Gradio**.
 * **Split Temporal:** Train (2018 – 1er semestre de 2024) / Val (2º semestre de 2024) / Test (2025). Se valida con "el futuro" para simular el escenario real de producción.
 
 ---
 
-## 🛠️ Stack Tecnológico y Pipeline
+## 4. Stack Tecnológico y Pipeline
 
 El sistema funciona con un flujo de 3 etapas modularizadas:
 
@@ -59,7 +59,7 @@ El sistema funciona con un flujo de 3 etapas modularizadas:
 
 ---
 
-## 📂 Estructura del Repositorio
+## 5. Estructura del Repositorio
 
 ```text
 boletin-oficial-caba-ml/
@@ -85,7 +85,7 @@ boletin-oficial-caba-ml/
     └── Draghi_Informe_TP_Final.pdf  # Informe técnico detallado
 ```
 
-## 🔄 Evolución del proyecto
+## 6. Evolución del proyecto
 
 Este trabajo es la cuarta iteración de una serie de prototipos para automatizar el relevamiento normativo en el Boletín Oficial de CABA:
 
@@ -103,11 +103,11 @@ Este trabajo es la cuarta iteración de una serie de prototipos para automatizar
    exploración de fine-tuning y despliegue de un pipeline SVM + TF-IDF.
 
 
-## ✒️ Autor
+## 7. Autor
 
 Juan Draghi – Bibliotecario, Consejo Profesional de Arquitectura y Urbanismo (CPAU).
 
-## Uso de herramientas de IA
+## 8. Uso de herramientas de IA
 
 Parte del diseño metodológico, del código en Python y de la documentación de este proyecto fue asistida mediante el uso de modelos de lenguaje (ChatGPT, OpenAI), utilizados como apoyo durante la cursada de la Diplomatura en Inteligencia Artificial.
 
