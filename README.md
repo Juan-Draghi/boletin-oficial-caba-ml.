@@ -4,6 +4,8 @@
 
 Este proyecto implementa un pipeline de aprendizaje supervisado para detectar automáticamente normativa relevante para el ejercicio profesional de la arquitectura y el urbanismo en el **Boletín Oficial de la Ciudad de Buenos Aires**.
 
+## Demo en Hugging Face Spaces:
+**[Acceder al Detector de Normativa (Hugging Face Spaces)](https://huggingface.co/spaces/J-Draghi/Analisis_Boletin_Oficial_CABA)**
 ---
 
 ## 1. Definición del Problema
